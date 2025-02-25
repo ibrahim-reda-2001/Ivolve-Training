@@ -1,5 +1,5 @@
 #!/bin/bash
-
+####
 # Ping sweep for 172.16.17.x subnet
 for x in {0..255}; do
     ip="172.18.208.$x"
