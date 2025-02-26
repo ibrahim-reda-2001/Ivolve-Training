@@ -1,0 +1,33 @@
+---
+- name: install apache
+  hosts: apache-hosts
+  tasks:
+    - name: update apt cache
+      apt:
+        update_cache: yes
+    - name: install apache
+      apt:
+        name: apache2
+        state: present
+    - name: start apache
+      service:
+        name: apache2
+        state: started 
+    - name: enable apache
+      service:
+        name: apache2
+        enabled: yes
+    - name: copy index.html
+      copy:
+        src: index.html
+        dest: /var/www/html/index.html    
+    - name: enable port 80 in firewall
+      ufw:
+        rule: allow
+        port: 80
+        proto: tcp
+        state: enabled
+    - name: restart firewall
+      service:
+        name: ufw
+        state: restarted
