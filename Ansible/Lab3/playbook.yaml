@@ -1,0 +1,40 @@
+---
+- name: Install MySQL and configure database
+  hosts: DB-server
+  become: yes
+  vars_files:
+    - secrets.yml  # Encrypted file containing sensitive data
+
+  tasks:
+    - name: Update APT package cache
+      ansible.builtin.apt:
+        update_cache: yes
+    - name: Install python3-mysqldb
+      ansible.builtin.apt:
+        name: python3-mysqldb
+        state: present
+    - name: Install MySQL server
+      ansible.builtin.apt:
+        name: mysql-server
+        state: present
+
+    - name: Start and enable MySQL service
+      ansible.builtin.service:
+        name: mysql
+        state: started
+        enabled: yes
+    - name: Create a new database with name 'ivolve'
+      community.mysql.mysql_db:
+         name: ivolve
+         state: present
+         login_user: root
+         login_unix_socket: /run/mysqld/mysqld.sock
+    - name: Create MySQL user and grant
+      community.mysql.mysql_user:
+        name: ivolve-user
+        password: "{{ ivolve_db_password }}"
+        priv: '*.*:ALL'
+        state: present
+        login_user: root
+        login_password: "{{ mysql_root_password }}"
+        login_unix_socket: /run/mysqld/mysqld.sock
