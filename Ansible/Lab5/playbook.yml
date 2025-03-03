@@ -1,0 +1,8 @@
+---
+- name: Install Apache using Galaxy role
+  hosts: tag_Role_Web  # Target instances tagged with "Role: Web"
+  become: true
+  roles:
+    - role: geerlingguy.apache
+      vars:
+        apache_listen_port: 80
