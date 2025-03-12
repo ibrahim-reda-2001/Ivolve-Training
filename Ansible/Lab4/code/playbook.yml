@@ -5,4 +5,3 @@
   roles:
     - role: role/Jenkins   
     - role: role/Docker
-    - role: role/Openshift
